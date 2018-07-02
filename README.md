@@ -1,4 +1,7 @@
-# nhl-scraperl
-NHL scraping with perl
+# Sport::Analytics::NHL (formerly nhl-scraperl)
 
-I will move the clean stuff from my own repository here.
+NHL scraping and data processing with perl
+
+The initial import is done. Consult the 'README' file. This a CPAN-like module with one executable (scripts/scrape) 
+
+Enjoy!
