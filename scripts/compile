@@ -1,53 +1,48 @@
-#!perl
+#!/usr/local/bin/perl
 
 use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
+use experimental qw(smartmatch);
 
 use Sport::Analytics::NHL::LocalConfig;
 use Sport::Analytics::NHL;
 use Sport::Analytics::NHL::Usage;
 
 my @accepts_opts = qw(
-	:season :database
-	data-dir force no-schedule-crawl
+	data-dir force test
 );
+
 my @accepts_args = (
 	{
 		name        => 'GAME_IDS',
-		description => 'The NHL 10-digit game ids or HDB 9-digit game ids or YYYYMMDD dates',
+		description => 'Our 9-digit game ids that are present in the file system',
 	}
 );
 
-my $what_it_does = 'Scrape the NHL games and store them';
+my $what_it_does = 'Validate the NHL reports and compile them into Storable Perl structures';
 my $opts = gopts($what_it_does, \@accepts_opts, \@accepts_args);
 my $hockeydb = Sport::Analytics::NHL->new($opts);
-$hockeydb->scrape_games($opts, @ARGV);
+$hockeydb->compile($opts, @ARGV);
 
 =head1 NAME
 
-scrape - scrape the NHL website for games
+compile - validate the NHL reports and compile them into Storable Perl structures
 
 =head1 SYNOPSIS
 
- Scrape the NHL games and store them
- Usage: scrape [Options] Arguments
-
+ Validate the NHL reports and compile them into Storable Perl structures
+ Usage: compile [Options] Arguments
  Options:
 	-h|--help                       print this message and exit
 	-V|--version                    print version and exit
 	-v|--verbose                    produce verbose output to STDERR
 	-d|--debug                      produce debug output to STDERR
-	-s|--start-season    SEASON     Start at season SEASON (default 2018)
-	-S|--stop-season     SEASON     Stop at season SEASON (default 2018)
-	-T|--start-season    STAGE      Scrape stage STAGE (2: REGULAR, 3: PLAYOFF, default: 3
-	--no-database                   Do not use a MongoDB backend
-	-D|--database        DB         Use Mongo database DB (default hockeytest)
 	-E|--data-dir        DIR        Data directory root (default /misc/nhl)
 	-f|--force                      override/overwrite existing data
-	--no-schedule-crawl             Try to use schedule already present in the system
+	--test                          Test the validity of the files (use with caution)
  Arguments:
-	GAME_IDS             The NHL 10-digit game ids or HDB 9-digit game ids or YYYYMMDD dates
+	GAME_IDS             Our 9-digit game ids that are present in the file system
 
 =cut
 

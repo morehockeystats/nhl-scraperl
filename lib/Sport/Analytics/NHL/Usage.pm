@@ -13,6 +13,7 @@ use Sport::Analytics::NHL;
 use parent 'Exporter';
 
 our @EXPORT = qw(gopts);
+
 =head1 NAME
 
 Sport::Analytics::NHL::Usage - an internal utility module standardizing the usage of our applications.
@@ -89,6 +90,16 @@ our %OPTS = (
 			description => 'override/overwrite existing data',
 		},
 		{
+			long        => 'test',
+			description => 'Test the validity of the files (use with caution)'
+		},
+		{
+			long        => 'doc',
+			description => 'Only process reports of type doc (repeatable). Available types are: BS, PL, RO, GS, ES',
+			repeatable  => 1, arg => 'DOC',
+			type        => 's'
+		},
+		{
 			long        => 'no-schedule-crawl',
 			description => 'Try to use schedule already present in the system',
 		},
@@ -140,7 +151,7 @@ sub gopts ($$$) {
 				@opts = @{ $OPTS{$1} };
 			}
 			else {
-				@opts = grep { $_->{long} eq $_ } @{ $OPTS{misc} }
+				@opts = grep { $_->{long} eq $opt_group } @{ $OPTS{misc} };
 			}
 			for my $opt (@opts) {
 				$usage_message .= sprintf(
@@ -149,16 +160,19 @@ sub gopts ($$$) {
 					$opt->{arg} || '',
 					$opt->{description},
 				);
+				my $is_repeatable = $opt->{repeatable} ? '@' : '';
 				$g_opts{
 					(($opt->{short} ? "$opt->{short}|" : '') . $opt->{long}) .
-						($opt->{type} ? "=$opt->{type}" : '')
-				} = $opt->{action} || \$u_opts->{convert_opt($opt->{long})};
+						($opt->{type} ? "=$opt->{type}$is_repeatable" : '')
+				} = ($opt->{action} || \$u_opts->{convert_opt($opt->{long})});
 			}
 		}
 	}
 	else {
 		$usage_message .= "\t\tNo Options\n";
 	}
+	#use Data::Dumper;
+	#print Dumper \%g_opts;
 	if (@{$args}) {
 		$usage_message .= "\t\tArguments:\n";
 		for my $arg (@{$args}) {
