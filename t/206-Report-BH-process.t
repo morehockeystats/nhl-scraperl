@@ -22,7 +22,7 @@ $BOXSCORE = $report;
 isa_ok($report, 'Sport::Analytics::NHL::Report::BH');
 $report->process();
 test_boxscore($report, {bh => 1});
-is($TEST_COUNTER->{Curr_Test}, 1011, 'full test run');
+is($TEST_COUNTER->{Curr_Test}, 1008, 'full test run');
 is($TEST_COUNTER->{Curr_Test}, $TEST_COUNTER->{Test_Results}[0], 'all ok');
 $BOXSCORE = undef;
 

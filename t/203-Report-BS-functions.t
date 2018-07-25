@@ -32,7 +32,7 @@ $report->set_teams($report->{json});
 test_teams($report->{teams});
 $report->set_events($report->{json}{liveData}{plays}{allPlays});
 test_events($report->{events});
-is($TEST_COUNTER->{Curr_Test}, 4436, 'full test run');
+is($TEST_COUNTER->{Curr_Test}, 4426, 'full test run');
 is($TEST_COUNTER->{Curr_Test}, $TEST_COUNTER->{Test_Results}[0], 'all ok');
 
 $BOXSCORE = undef;

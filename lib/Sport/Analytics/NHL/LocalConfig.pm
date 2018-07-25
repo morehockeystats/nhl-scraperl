@@ -32,10 +32,10 @@ our $IS_AUTHOR = 0;
 
 # UNCOMMENT AND CONFIGURE FOR MONGO USAGE
 
-#our $MONGO_DB = undef;
-our $MONGO_DB   = 'hockeytest';
-our $MONGO_HOST = '127.0.0.1';
-our $MONGO_PORT = 27017;
+our $MONGO_DB = undef;
+#our $MONGO_DB   = 'hockeytest';
+#our $MONGO_HOST = '127.0.0.1';
+#our $MONGO_PORT = 27017;
 
 our $DATA_DIR = '/misc/nhl';
 
@@ -43,7 +43,10 @@ our @EXPORT = qw(
 	$MONGO_DB $MONGO_HOST $MONGO_PORT
 	$CURRENT_SEASON $CURRENT_STAGE $DATA_DIR
 	$IS_AUTHOR
+	$MERGED_FILE
 );
+
+our $MERGED_FILE = 'merged.storable';
 
 1;
 

@@ -22,7 +22,7 @@ $report = Sport::Analytics::NHL::Report::GS->new({
 isa_ok($report, 'Sport::Analytics::NHL::Report::GS');
 $report->process();
 test_boxscore($report, {gs => 1});
-is($TEST_COUNTER->{Curr_Test}, 103, 'full test run');
+is($TEST_COUNTER->{Curr_Test}, 98, 'full test run');
 is($TEST_COUNTER->{Curr_Test}, $TEST_COUNTER->{Test_Results}[0], 'all ok');
 $BOXSCORE = undef;
 

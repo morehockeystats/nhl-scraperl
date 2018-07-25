@@ -8,6 +8,7 @@ use experimental qw(smartmatch);
 use Test::More;
 
 use JSON;
+use Storable;
 
 use Sport::Analytics::NHL::LocalConfig;
 use Sport::Analytics::NHL::Config;
@@ -29,7 +30,8 @@ $ENV{HOCKEYDB_NODB} = 1;
 #print Dumper \%ENV;
 #exit;
 my $nhl = Sport::Analytics::NHL->new();
-my @storables = $nhl->compile({}, 201120010);
+my @storables = sort $nhl->compile({}, 201120010);
+
 is_deeply(
 	[ sort @storables ],
 	[qw(
@@ -44,6 +46,27 @@ is_deeply(
 for my $storable (@storables) {
 	ok(-f $storable, 'file exists');
 }
+
+my $r_storable = Sport::Analytics::NHL::retrieve_compiled_report({}, 201120010, 'BS', 't/tmp/data/2011/0002/0010');
+is_deeply($r_storable, retrieve($storables[1]), 'retrieve correct');
+unlink 't/tmp/data/2011/0002/0010/BS.storable';
+$r_storable = Sport::Analytics::NHL::retrieve_compiled_report(
+	{no_compile => 1}, 201120010, 'BS', 't/tmp/data/2011/0002/0010',
+);
+is($r_storable, undef, 'no compile detected');
+$r_storable = Sport::Analytics::NHL::retrieve_compiled_report(
+	{}, 201120010, 'BS', 't/tmp/data/2011/0002/0010',
+);
+is_deeply($r_storable, retrieve $storables[1], 'compile on the fly correct');
+unlink 't/tmp/data/2011/0002/0010/BS.storable';
+unlink 't/tmp/data/2011/0002/0010/BS.json';
+$r_storable = Sport::Analytics::NHL::retrieve_compiled_report(
+	{}, 201120010, 'BS', 't/tmp/data/2011/0002/0010',
+);
+is($r_storable, undef, 'no source to compile detected');
+
+
+
 END {
 	system(qw(rm -rf t/tmp/data));
 }
