@@ -27,7 +27,7 @@ $hockeydb->normalize($opts, @ARGV);
 
 =head1 NAME
 
-normalize - normalize (recompile if necessary) the NHL reports into one.
+normalize - normalize (recompile if necessary) the merged NHL boxscore.
 
 =head1 SYNOPSIS
 

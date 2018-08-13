@@ -25,10 +25,8 @@ test_env();
 $ENV{HOCKEYDB_DATA_DIR} = 't/tmp/data';
 system(qw(mkdir -p t/tmp/));
 system(qw(cp -a t/data t/tmp/));
+system('find t/tmp -name "*.storable" -delete');
 $ENV{HOCKEYDB_NODB} = 1;
-#use Data::Dumper;
-#print Dumper \%ENV;
-#exit;
 my $nhl = Sport::Analytics::NHL->new();
 my @storables = sort $nhl->compile({}, 201120010);
 
@@ -57,7 +55,7 @@ is($r_storable, undef, 'no compile detected');
 $r_storable = Sport::Analytics::NHL::retrieve_compiled_report(
 	{}, 201120010, 'BS', 't/tmp/data/2011/0002/0010',
 );
-is_deeply($r_storable, retrieve $storables[1], 'compile on the fly correct');
+is_deeply($r_storable, retrieve($storables[1]), 'compile on the fly correct');
 unlink 't/tmp/data/2011/0002/0010/BS.storable';
 unlink 't/tmp/data/2011/0002/0010/BS.json';
 $r_storable = Sport::Analytics::NHL::retrieve_compiled_report(

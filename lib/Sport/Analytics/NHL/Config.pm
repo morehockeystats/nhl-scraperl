@@ -328,7 +328,7 @@ our %VOCABULARY = (
 			'EMBELLISHMENT',
 		],
 		'ELBOWING'                                     => [],
-		'FIGHTING'                                     => [],
+		'FIGHTING'                                     => [ 'FIGHTING (MAJ)' ],
 		'GAME MISCONDUCT'                              => [],
 		'GAME MISCONDUCT - TEAM STAFF'                 => [],
 		'GAME MISCONDUCT - HEAD COACH'                 => [ 'GAME MISCONDUCT - HEAD' ],
@@ -365,6 +365,7 @@ our %VOCABULARY = (
 		'INTERFERENCE ON GOALKEEPER'                   => [
 			'INTERFERENCE - GOALKEEPER',
 			'INTERFERENCE - GOALTENDER',
+			'INTERFERENCE-ON THE GOALTENDER'
 		],
 		'INTERFERE W/ OFFICIAL'                        => [ 'INTERFERENCE WITH OFFICIAL' ],
 		'KICKING'                                      => [],
@@ -557,19 +558,38 @@ our %PENALTY_POSSIBLE_NO_OFFENDER = (
 	'GROSS MISCONDUCT'                => 1,
 );
 
+our %REVERSE_STAT = (
+	HIT   => 'received_hit',
+	BLOCK => 'shot_blocked',
+	PENL  => 'drew_penalty',
+	GOAL  => 'goals_against',
+);
+
 our $LAST_PLAYOFF_GAME_INDEX = 417;
 our $LATE_START_IN_2012      = 1367330000;
 
+our $UNDRAFTED_PICK = 300;
+
 our @EXPORT = qw(
+	$LEAGUE_NAME
 	$REGULAR $PLAYOFF $LAST_PLAYOFF_GAME_INDEX $LATE_START_IN_2012 %DEFAULTED_GAMES
 	$FIRST_SEASON @LOCKOUT_SEASONS %FIRST_REPORT_SEASONS
 	$MAIN_GAME_FILE $SECONDARY_GAME_FILE
 	%TEAMS
 	$UNKNOWN_PLAYER_ID $BENCH_PLAYER_ID $COACH_PLAYER_ID $EMPTY_NET_ID
+	$UNDRAFTED_PICK
 	%VOCABULARY
 	%DATA_BY_SEASON %STAT_RECORD_FROM %REASONABLE_EVENTS
 	%PENALTY_POSSIBLE_NO_OFFENDER
+	%ZERO_EVENT_GAMES
+	%REVERSE_STAT
 );
+
+our %ZERO_EVENT_GAMES = (
+	194320118 => 1,
+);
+
+our $LEAGUE_NAME = 'NHL';
 
 1;
 
