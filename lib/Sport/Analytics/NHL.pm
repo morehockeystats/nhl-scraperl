@@ -20,9 +20,9 @@ use if ! $ENV{HOCKEYDB_NODB} && $MONGO_DB, 'Sport::Analytics::NHL::DB';
 use Sport::Analytics::NHL::Merger;
 use Sport::Analytics::NHL::Normalizer;
 use Sport::Analytics::NHL::PenaltyAnalyzer;
-#use Sport::Analytics::NHL::Generator;
+use Sport::Analytics::NHL::Generator;
 use Sport::Analytics::NHL::Populator;
-#use Sport::Analytics::NHL::Report;
+use Sport::Analytics::NHL::Report;
 use Sport::Analytics::NHL::Scraper qw(crawl_schedule crawl_game);
 use Sport::Analytics::NHL::Test;
 use Sport::Analytics::NHL::Tools qw(:path :basic :schedule set_player_stat);
@@ -36,7 +36,7 @@ Sport::Analytics::NHL - Crawl data from NHL.com and put it into a database
 
 =head1 VERSION
 
-Version 1.50
+Version 1.51
 
 =cut
 
@@ -44,7 +44,7 @@ our @EXPORT = qw(
 	hdb_version
 );
 
-our $VERSION = "1.50";
+our $VERSION = "1.51";
 
 =head1 SYNOPSIS
 
