@@ -2,54 +2,53 @@ package Sport::Analytics::NHL::Vars;
 
 use strict;
 use warnings;
+use v5.10;
 
-use parent 'Exporter';
+use parent 'Exporter::Tiny';
+
 use Sport::Analytics::NHL::LocalConfig;
 
+our $FS_BACKUP;
+
 our @local_config_variables = qw(
-	API_LOG BASE_DIR CURRENT_SEASON CURRENT_STAGE DATA_DIR
-	DEFAULT_PLAYERFILE_EXPIRATION ROTOFILE_EXPIRATION ERROR_WEB_LOG
-	HTML_DIR IS_AUTHOR LOG_DIR MAIN_LOG MERGED_FILE MONGO_DB
-	MONGO_HOST MONGO_PORT NORMALIZED_FILE NORMALIZED_JSON
-	REDIRECT_STDERR REPORTS_DIR	SCRAPED_GAMES SQL_COMMIT_RATE
-	STDERR_LOG SQLNAME SQLUSER SUMMARIZED_FILE
-	TWITTER_ACCESS_TOKEN TWITTER_ACCESS_TOKEN_SECRET TWITTER_DIR WEB_LOG
+	CURRENT_SEASON CURRENT_STAGE
+	DEFAULT_PLAYERFILE_EXPIRATION DEFAULT_STORAGE FS_BACKUP
+	DEFAULT_MONGO_DB MONGO_HOST MONGO_PORT
+	DEFAULT_SQL_DB
+	BASE_DIR DATA_DIR LOGS_DIR REPORTS_DIR MAIL_DIR
+	IS_AUTHOR
+	SCHEDULE_FILE
 );
-my @LOCAL_CONFIG;
-our $DB;
-our $CACHES = {};
-our $SQL;
+my @LOCAL_CONFIG = ();
 my @DIRS = ();
 no strict 'refs';
 for my $lcv (@local_config_variables) {
 	my $var = '$'.$lcv;
-	eval 
-		qq{our $var; $var= "$LOCAL_CONFIG{$lcv}";};
+	eval qq{our $var; $var= "$LOCAL_CONFIG{$lcv}";};
+	next unless defined $var;
 	push(@LOCAL_CONFIG, $var);
 	push(@DIRS, $var) if $var =~ /dir$/i;
 }
-our $WEB_STAGES; our $WEB_STAGES_TOTAL; our @SEASON_START_STOP;
+$FS_BACKUP ||= 0;
 our @GLOBALS = qw($DB $CACHES $SQL);
-our @WEB    = qw($WEB_STAGES $WEB_STAGES_TOTAL @SEASON_START_STOP);
+#our @WEB    = qw($WEB_STAGES $WEB_STAGES_TOTAL @SEASON_START_STOP $WEB_LOG $ERROR_WEB_LOG);
+our @BASIC   = qw($CURRENT_SEASON $CURRENT_STAGE);
+our @SCRAPE  = (@BASIC, @DIRS, qw($DEFAULT_PLAYERFILE_EXPIRATION));
+our @TEST    = (@BASIC, qw($IS_AUTHOR));
 
 our @EXPORT_OK = (qw(
 	@local_config_variables
-), @LOCAL_CONFIG, @GLOBALS, @WEB);
-
-our @BASIC  = qw($CURRENT_SEASON $CURRENT_STAGE);
-our @SCRAPE = (@BASIC, @DIRS, qw($DEFAULT_PLAYERFILE_EXPIRATION $ROTOFILE_EXPIRATION));
-our @TEST   = (@BASIC, qw($IS_AUTHOR));
+), @LOCAL_CONFIG, @SCRAPE, @BASIC, @TEST, @GLOBALS);
 
 our %EXPORT_TAGS = (
 	local_config => [ @LOCAL_CONFIG, qw(@local_config_variables) ],
-	globals      => [ @GLOBALS   ],
-	scrape       => [ @SCRAPE    ],
+	scrape       => [ @SCRAPE ],
 	test         => [ @TEST ],
 	all          => [ @EXPORT_OK ],
-	mongo        => [ qw($MONGO_DB $MONGO_HOST $MONGO_PORT) ],
 	basic        => [ @BASIC ],
-	web          => [ @WEB   ],
+	dirs         => [ @DIRS  ],
 );
+
 1;
 
 =head1 NAME
@@ -90,7 +89,7 @@ $CURRENT_SEASON, $CURRENT_STAGE
 
 =item :mongo
 
-$MONGO_DB, $MONGO_HOST, $MONGO_PORT
+$DEFAULT_MONGO_DB, $MONGO_HOST, $MONGO_PORT
 
 =item :all
 
@@ -100,14 +99,11 @@ All of the above
 
 =cut
 
-=head1 GLOBAL VARIABLES
-
- The behaviour of the tests is controlled by several global variables:
- * $PLAYER_IDS - hashref of all player ids encountered.
+1;
 
 =head1 AUTHOR
 
-More Hockey Stats, C<< <contact at morehockeystats.com> >>
+Roman Parparov, C<< <contact at morehockeystats.com> >>
 
 =head1 BUGS
 
@@ -121,6 +117,7 @@ automatically be notified of progress on your bug as I make changes.
 You can find documentation for this module with the perldoc command.
 
     perldoc Sport::Analytics::NHL::Vars
+
 
 You can also look for information at:
 

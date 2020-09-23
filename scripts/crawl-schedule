@@ -1,0 +1,16 @@
+#!/usr/local/bin/perl
+
+package crawl_schedule;
+
+use parent 'Sport::Analytics::NHL::Script';
+use Sport::Analytics::NHL qw(get_schedule);
+
+sub run ($) { get_schedule(shift); }
+
+package main;
+my $app = crawl_schedule->new(
+	'crawls the schedule',
+	[qw(:database :season :date force test data-dir)],
+);
+
+$app->run();

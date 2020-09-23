@@ -4,17 +4,20 @@ use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
 
-use Test::More tests => 27;
+use Test::More;
 
 my @MODULES;
 BEGIN {
     no strict 'refs';
+    my @files = split(/\n/, qx(find lib -name "*.pm" -print));
+    plan tests => scalar(@files);
+
     @MODULES = sort map {
         s|^lib/||;
         s|/|::|g;
         s|.pm$||;
         $_;
-    } split(/\n/, qx(find lib -name "*.pm" -print));
+    } @files;
     for my $module (@MODULES) {
         use_ok($module) || BAIL_OUT "Can't use $module";
         my $v = "$module" . "::VERSION";

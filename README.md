@@ -4,7 +4,7 @@ NHL scraping and data processing with perl
 
 The initial import is done. Consult the 'README' file. This a CPAN-like module with one executable (scripts/scrape) 
 
-Version 1.10:
-Including parsing, validating and compiling the NHL reports into Storable data files.
+The old code is now located in mhs-2019 branch.
+This is a fresh start, v2.00.
 
 Enjoy!

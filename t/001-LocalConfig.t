@@ -1,9 +1,7 @@
 #!perl
 
-use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
-use experimental qw(smartmatch);
 
 use Test::More;
 

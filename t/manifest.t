@@ -22,10 +22,21 @@ ok_manifest({
 		qr/normalized.json/a,
 		qr/.tree$/,
 		qr/ignore.txt/,
+		qr/_Deparsed_XSubs.pm/,
 	], 
 	exclude => [
 		'/doc/ideas.txt',
 		'/tools',
+		'/_build',
+		'/blog',
+		'/fantasy',
+		'/yahoo',
+		'/twitter',
+		'/ncaa',
+		'/html',
+		'/doc',
+		'/t/template',
+		'/.idea',
 	],
 	bool => 'or'
 });
