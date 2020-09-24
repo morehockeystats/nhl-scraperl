@@ -1,6 +1,7 @@
 Build.PL
 Bundle/NHL.pm
 Changes
+CODE_OF_CONDUCT.md
 lib/Sport/Analytics/NHL/Config.pm
 lib/Sport/Analytics/NHL/DB.pm
 lib/Sport/Analytics/NHL/LocalConfig.pm
@@ -13,8 +14,10 @@ lib/Sport/Analytics/NHL/Tools.pm
 lib/Sport/Analytics/NHL/Usage.pm
 lib/Sport/Analytics/NHL/Util.pm
 lib/Sport/Analytics/NHL/Vars.pm
+LICENSE
 MANIFEST			This list of files
 README
+README.md
 scripts/crawl-schedule
 t/000-load.t
 t/001-LocalConfig.t
@@ -41,3 +44,5 @@ t/pod-coverage.t
 t/pod.t
 t/lib/Util.pm
 t/template
+META.yml
+META.json

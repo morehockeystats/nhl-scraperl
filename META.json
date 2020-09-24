@@ -1,0 +1,94 @@
+{
+   "abstract" : "Interface to the National Hockey League data",
+   "author" : [
+      "More Hockey Stats <contact@morehockeystats.com>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4231",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : 2
+   },
+   "name" : "Sport-Analytics-NHL",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "BSON::OID" : "v1.8.1",
+            "MongoDB" : "v1.6.0"
+         },
+         "requires" : {
+            "Data::Dumper" : "2.124",
+            "Date::Format" : "2.24",
+            "Date::Parse" : "2.31",
+            "File::Basename" : "2.77",
+            "File::Path" : "2.08",
+            "Getopt::Long" : "2.38",
+            "JSON" : "2.15",
+            "LWP::Protocol::https" : "5.827",
+            "LWP::Simple" : "5.827",
+            "List::MoreUtils" : "0.423",
+            "POSIX" : "1.17",
+            "Storable" : "2.21",
+            "Syntax::Collector" : "0.005",
+            "Time::HiRes" : "1.9721",
+            "experimental" : "0.019",
+            "parent" : "0.1"
+         }
+      }
+   },
+   "provides" : {
+      "Sport::Analytics::NHL" : {
+         "file" : "lib/Sport/Analytics/NHL.pm",
+         "version" : "2.00"
+      },
+      "Sport::Analytics::NHL::Config" : {
+         "file" : "lib/Sport/Analytics/NHL/Config.pm"
+      },
+      "Sport::Analytics::NHL::DB" : {
+         "file" : "lib/Sport/Analytics/NHL/DB.pm"
+      },
+      "Sport::Analytics::NHL::LocalConfig" : {
+         "file" : "lib/Sport/Analytics/NHL/LocalConfig.pm"
+      },
+      "Sport::Analytics::NHL::Schedule" : {
+         "file" : "lib/Sport/Analytics/NHL/Schedule.pm"
+      },
+      "Sport::Analytics::NHL::Scraper" : {
+         "file" : "lib/Sport/Analytics/NHL/Scraper.pm"
+      },
+      "Sport::Analytics::NHL::Script" : {
+         "file" : "lib/Sport/Analytics/NHL/Script.pm"
+      },
+      "Sport::Analytics::NHL::Test" : {
+         "file" : "lib/Sport/Analytics/NHL/Test.pm"
+      },
+      "Sport::Analytics::NHL::Tools" : {
+         "file" : "lib/Sport/Analytics/NHL/Tools.pm"
+      },
+      "Sport::Analytics::NHL::Usage" : {
+         "file" : "lib/Sport/Analytics/NHL/Usage.pm"
+      },
+      "Sport::Analytics::NHL::Util" : {
+         "file" : "lib/Sport/Analytics/NHL/Util.pm"
+      },
+      "Sport::Analytics::NHL::Vars" : {
+         "file" : "lib/Sport/Analytics/NHL/Vars.pm"
+      }
+   },
+   "release_status" : "stable",
+   "version" : "2.00",
+   "x_serialization_backend" : "JSON::PP version 4.05"
+}
