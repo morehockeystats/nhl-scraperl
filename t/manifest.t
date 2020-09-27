@@ -23,6 +23,7 @@ ok_manifest({
 		qr/.tree$/,
 		qr/ignore.txt/,
 		qr/_Deparsed_XSubs.pm/,
+		qr/.conf$/,
 	], 
 	exclude => [
 		'/doc/ideas.txt',

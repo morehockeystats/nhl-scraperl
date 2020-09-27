@@ -109,7 +109,7 @@ sub new ($;$) {
 	my $opts  = shift || {};
 
 	my $self = {config => $opts, data => []};
-	$self->{config}{id_field} ||= 'game';
+	$self->{config}{id_field} ||= 'game_id';
 	bless $self, $class;
 	$self;
 }
@@ -268,15 +268,17 @@ sub crawl_by_season ($;$) {
 	my $season = shift || $self->{config}{season};
 	my $schedule_json;
 	my @seasons = $season
-		? ($season)
+		? (ref $season ? @{$season} : $season)
 		: (($self->{config}{start_season} || $FIRST_SEASON)
 		.. ($self->{config}{stop_season} || $CURRENT_SEASON));
+	@seasons = @{$seasons[0]} if ref $seasons[0];
 	for my $season (@seasons) {
+		next if grep { $_ == $season } @LOCKOUT_SEASONS;
 		my ($start_date, $stop_date) = get_start_stop_date($season);
 		my $schedule_json_url = sprintf(
 			$SCHEDULE_JSON_API, $start_date, $stop_date
 		);
-		$schedule_json = scrape({ url => $schedule_json_url });
+		$schedule_json = scrape({ url => $schedule_json_url, die => 1 });
 		$self->populate($schedule_json) if $schedule_json;
 	}
 }

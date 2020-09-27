@@ -4,6 +4,8 @@ use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
 
+no strict 'refs';
+
 use Test::More;
 
 use Sport::Analytics::NHL;

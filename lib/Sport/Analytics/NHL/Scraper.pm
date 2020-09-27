@@ -8,7 +8,7 @@ use LWP::Simple;
 use Time::HiRes qw(usleep);
 
 use Sport::Analytics::NHL::Tools qw(:dates);
-use Sport::Analytics::NHL::Util  qw(:debug);
+use Sport::Analytics::NHL::Util  qw(:debug log_mhs);
 
 use parent 'Exporter::Tiny';
 
@@ -65,15 +65,24 @@ sub scrape ($) {
 	my $content;
 	while (! $content && $opts->{retries} > $r++) {
 		debug "Trying ($r/$opts->{retries}) $opts->{url}...";
+		log_mhs('Scraper', "Trying ($r/$opts->{retries}) $opts->{url}...", 'debug');
 		$content = get($opts->{url});
 		unless ($opts->{validate}->($content)) {
 			verbose "$opts->{url} failed validation, retrying";
+			log_mhs('Scraper', sprintf("Failed to validate %s", $opts->{url}), 'notice');
 			$content = undef;
 		}
 		usleep 200000 unless $content;
 	}
-	debug sprintf("Retrieved in %.3f seconds", time - $begin_tx) if $content;
-	die "Failed to retrieve $opts->{url}" if ! $content && $opts->{die};
+	if (! $content) {
+		log_mhs('Scraper', sprintf("Failed to retrieve %s", $opts->{url}), 'error');
+		die "Failed to retrieve $opts->{url}" if $opts->{die};
+	}
+	else {
+		my $now = time;
+		debug sprintf("Retrieved in %.3f seconds", $now - $begin_tx) if $content;
+		log_mhs('Scraper', sprintf("Retrieved %s in %.3f seconds", $opts->{url}, $now - $begin_tx), 'notice');
+	}
 	$content;
 }
 

@@ -9,9 +9,10 @@ use Test::More;
 use POSIX qw(strftime);
 
 use Sport::Analytics::NHL::Config qw(:all);
-use Sport::Analytics::NHL::Vars qw($IS_AUTHOR $REPORTS_DIR);
-use Sport::Analytics::NHL::Util;
-
+use Sport::Analytics::NHL::Vars qw(
+	$IS_AUTHOR $REPORTS_DIR $CONFIG $CONFIG_FILE $LOG_DIR
+);
+use Sport::Analytics::NHL::Util qw(read_config);
 use Storable qw(dclone store retrieve);
 
 use Data::Dumper;
@@ -27,6 +28,12 @@ my $TEST_DB = 'hockeytest';
 sub test_env (;$) {
 
 	my $dbname = shift || $TEST_DB;
+
+	if ($CONFIG_FILE && -r $CONFIG_FILE) {
+		$CONFIG = read_config($CONFIG_FILE);
+	}
+
+	$LOG_DIR = "/tmp/mhs-$$/logs";
 
 	$ENV{HOCKEYDB_DBNAME}   = $dbname;
 	$ENV{HOCKEYDB_DEBUG}    = $IS_AUTHOR;

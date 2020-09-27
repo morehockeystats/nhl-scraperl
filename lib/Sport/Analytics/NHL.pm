@@ -12,11 +12,11 @@ Sport::Analytics::NHL - Crawl data from NHL.com and put it into a database.
 
 =head1 VERSION
 
-Version 2.00
+Version 2.01
 
 =cut
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 
 =head1 SYNOPSIS
 
@@ -53,8 +53,9 @@ See L<Sport::Analytics::NHL::Usage> for more information.
 
 use parent 'Exporter::Tiny';
 
-our @EXPORT = qw(get_schedule);
+our @EXPORT = qw(get_schedule _version);
 
+sub _version () { return $VERSION }
 sub get_schedule ($) {
 
 	my $opts = shift;

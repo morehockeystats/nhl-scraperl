@@ -8,12 +8,15 @@ use Getopt::Long qw(:config no_ignore_case bundling);
 use List::MoreUtils qw(arrayify);
 use Date::Format;
 
-use Sport::Analytics::NHL::Vars   qw(:local_config);
+use Sport::Analytics::NHL qw(_version);
+use Sport::Analytics::NHL::Vars   qw(:local_config $CONFIG);
 use Sport::Analytics::NHL::Config qw(:basic :seasons);
+use Sport::Analytics::NHL::Util   qw(read_config);
 
 use parent 'Exporter::Tiny';
 
 our @EXPORT = qw(gopts usage);
+
 =head1 NAME
 
 Sport::Analytics::NHL::Usage - an internal utility module standardizing the usage of our applications.
@@ -50,6 +53,15 @@ This is the main wrapper for GetOptions to keep things coherent.
  Returns: a list of options to which convert_opt() was applied.
  Don't ask me why.
 
+=item C<parse_config_opts>
+
+Parses the config-file specified either via the option, or the $ENV{HOCKEYDB_CONFIG} environment variable or
+the $CONFIG_FILE variable in LocalConfig.pm . Only attempts to parse the file if present and readable. Reads
+it into $CONFIG global variable.
+
+ Arguments: options hashref, already parsed by bulk of gopts()
+ Returns: void ($CONFIG is set)
+
 =item C<order_date_opts>
 
 Sorts out a variety of date opts
@@ -78,7 +90,7 @@ Produces a start and end range of season, dates, or weeks
 our $USAGE_MESSAGE = '';
 our $def_db  = $ENV{HOCKEYDB_DBNAME}  || $DEFAULT_MONGO_DB || 'hockey';
 our $def_sql = $ENV{HOCKEYDB_SQLNAME} || $DEFAULT_SQL_DB   || 'hockey';
-our $VERSION = $Sport::Analytics::NHL::Collector::VERSION;
+our $VERSION = $Sport::Analytics::NHL::VERSION;
 our %OPTS = (
 	standard  => [
 		{
@@ -89,7 +101,7 @@ our %OPTS = (
 		{
 			short       => 'V', long => 'version',
 			action      => sub {
-				say $VERSION;
+				say _version();
 				exit;
 			},
 			description => 'print version and exit'
@@ -621,6 +633,16 @@ sub convert_opt ($) {
 	$c_opt;
 }
 
+sub parse_config_opts (;$) {
+
+	my $opts = shift || {};
+
+	$opts->{config_file} ||= (
+		$ENV{HOCKEYDB_CONFIG_FILE} || $CONFIG_FILE
+	);
+	$CONFIG = read_config($opts->{config_file}) if $opts->{config_file} && -r $opts->{config_file};
+}
+
 sub gopts ($$$;$) {
 
 	my $wid  = shift;
@@ -682,6 +704,7 @@ sub gopts ($$$;$) {
 	GetOptions(%g_opts) || usage();
 	$u_opts->{dry_run} = $ENV{HOCKEYDB_DRYRUN} if defined $ENV{HOCKEYDB_DRYRUN};
 	parse_date_opts($u_opts);
+	parse_config_opts($u_opts);
 	$u_opts;
 }
 

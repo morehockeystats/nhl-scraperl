@@ -71,8 +71,10 @@ sub get_start_stop_date ($) {
 
 	my $start_month = $season == $DELAYED_START ? 11 : 9;
 	my $stop_month  = $season == $DELAYED_STOP  ? 10 : 8;
+	# Temp hack due to a bug in the NHL website.
+	my $start_day = $season == 2016 ? 30 : 1;
 	(
-		sprintf("%04d-%02d-%02d", $season+0, $start_month, 1),
+		sprintf("%04d-%02d-%02d", $season+0, $start_month, $start_day),
 		sprintf("%04d-%02d-%02d", $season+1, $stop_month,  30),
 	);
 }

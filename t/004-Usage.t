@@ -9,12 +9,12 @@ use Date::Format;
 
 use Test::More;
 
-use Sport::Analytics::NHL::Vars   qw($CURRENT_SEASON);
+use Sport::Analytics::NHL::Vars   qw($CURRENT_SEASON $CONFIG $CONFIG_FILE);
 use Sport::Analytics::NHL::Config qw($FIRST_SEASON);
 use Sport::Analytics::NHL::Util   qw(:debug);
 use Sport::Analytics::NHL::Usage;
 
-plan tests => 9;
+plan tests => 10;
 
 my $opts = {};
 my $today     = time2str("%Y%m%d", time);
@@ -46,4 +46,8 @@ Sport::Analytics::NHL::Usage::parse_date_opts($opts);
 is_deeply($opts, {date => [$yesterday, $today]}, 'date options processed');
 $opts = {start_game_id => 201220001};
 eval { Sport::Analytics::NHL::Usage::parse_date_opts($opts) };
-like($@, qr/Start or stop values are unavailable for option game/, 'need both start and stop for game id')
+like($@, qr/Start or stop values are unavailable for option game/, 'need both start and stop for game id');
+$CONFIG_FILE = undef;
+Sport::Analytics::NHL::Usage::parse_config_opts($opts);
+is_deeply($CONFIG, {}, 'config is empty');
+

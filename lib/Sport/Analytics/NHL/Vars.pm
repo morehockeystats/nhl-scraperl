@@ -15,9 +15,9 @@ our @local_config_variables = qw(
 	DEFAULT_PLAYERFILE_EXPIRATION DEFAULT_STORAGE FS_BACKUP
 	DEFAULT_MONGO_DB MONGO_HOST MONGO_PORT
 	DEFAULT_SQL_DB
-	BASE_DIR DATA_DIR LOGS_DIR REPORTS_DIR MAIL_DIR
+	BASE_DIR DATA_DIR LOG_DIR REPORTS_DIR MAIL_DIR
 	IS_AUTHOR
-	SCHEDULE_FILE
+	SCHEDULE_FILE CONFIG_FILE
 );
 my @LOCAL_CONFIG = ();
 my @DIRS = ();
@@ -30,7 +30,8 @@ for my $lcv (@local_config_variables) {
 	push(@DIRS, $var) if $var =~ /dir$/i;
 }
 $FS_BACKUP ||= 0;
-our @GLOBALS = qw($DB $CACHES $SQL);
+our $CONFIG = {};
+our @GLOBALS = qw($DB $CACHES $SQL $CONFIG);
 #our @WEB    = qw($WEB_STAGES $WEB_STAGES_TOTAL @SEASON_START_STOP $WEB_LOG $ERROR_WEB_LOG);
 our @BASIC   = qw($CURRENT_SEASON $CURRENT_STAGE);
 our @SCRAPE  = (@BASIC, @DIRS, qw($DEFAULT_PLAYERFILE_EXPIRATION));
@@ -39,14 +40,14 @@ our @TEST    = (@BASIC, qw($IS_AUTHOR));
 our @EXPORT_OK = (qw(
 	@local_config_variables
 ), @LOCAL_CONFIG, @SCRAPE, @BASIC, @TEST, @GLOBALS);
-
 our %EXPORT_TAGS = (
 	local_config => [ @LOCAL_CONFIG, qw(@local_config_variables) ],
-	scrape       => [ @SCRAPE ],
-	test         => [ @TEST ],
-	all          => [ @EXPORT_OK ],
-	basic        => [ @BASIC ],
-	dirs         => [ @DIRS  ],
+	scrape       => \@SCRAPE,
+	test         => \@TEST,
+	all          => \@EXPORT_OK,
+	basic        => \@BASIC,
+	dirs         => \@DIRS,
+	globals      => \@GLOBALS,
 );
 
 1;

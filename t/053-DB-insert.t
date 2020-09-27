@@ -5,6 +5,8 @@ use strict;
 use warnings FATAL => 'all';
 
 use Test::More;
+use t::lib::Util;
+test_env();
 
 use Sport::Analytics::NHL::Vars qw($CACHES $DB $DEFAULT_STORAGE $IS_AUTHOR);
 use Sport::Analytics::NHL::DB;

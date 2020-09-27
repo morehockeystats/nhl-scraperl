@@ -25,3 +25,8 @@ Revision history for Sport::Analytics::NHL
 
 2.00    Sun Sep 20 14:13:54 EDT 2020
 	Bootstrapping v2.00 with SCHEDULE CRAWLER ONLY
+
+2.01	Sat Sep 26 09:48:09 EDT 2020
+	* Fixed a bug in the schedule crawler.
+	* Installed a workaround for NHL bug with the 2016 season schedule.
+	* Added logging and indexing to the database.

@@ -8,6 +8,8 @@ use Data::Dumper;
 use File::Basename;
 use File::Path qw(mkpath);
 
+use Sport::Analytics::NHL::Vars qw(:local_config);
+
 use Date::Parse;
 
 use parent 'Exporter::Tiny';
@@ -129,6 +131,18 @@ Merges two hashes into one.
  Returns: the merged hashref. The second one is the winner
   if keys coincide.
 
+=item C<log_mhs>
+
+Logs a message into a file by severity
+
+ Arguments: The logging facility string
+            The message string
+ [optional] The severity string (debug is ignored unless HOCKEYDB_DEBUG env is set)
+                                (info is ignored unless HOCKEYDB_VERBOSE env is set)
+            info is the default level.
+ [optional] The log file. $LOG_DIR/$0.log is the default value.
+ Returns: the log filename
+
 =back
 
 =cut
@@ -140,9 +154,9 @@ my @debug = qw(
 my @file = qw(read_file read_tab_file write_file read_config);
 my @tools = qw(merge_hashes);
 my @time = qw();
-
+my @logs = qw(log_mhs);
 our @EXPORT_OK = (
-	@debug, @file, @tools, @time
+	@debug, @file, @tools, @time, @logs
 );
 
 our %EXPORT_TAGS = (
@@ -352,6 +366,24 @@ sub merge_hashes ($$) {
 		}
 	}
 	$h;
+}
+
+sub log_mhs ($$;$$$) {
+
+	my $facility = shift;
+	my $message  = shift;
+	my $severity = shift || 'info';
+	my $filename = shift || undef;
+
+	return if $severity eq 'debug' && ! $ENV{HOCKEYDB_DEBUG};
+	return if $severity eq 'info'  && ! $ENV{HOCKEYDB_DEBUG} && ! $ENV{HOCKEYDB_VERBOSE};
+	$filename ||= $LOG_DIR . "/$0.log";
+	my $dir = dirname($filename);
+	mkpath($dir) unless -d $dir;
+	open(my $fh, '>>', $filename) or die "Couldn't open $filename for logging: $!";
+	printf $fh "%s [%s] <%s>: %s\n", scalar(localtime), $severity, $facility, $message;
+	close $fh;
+	$filename;
 }
 
 1;

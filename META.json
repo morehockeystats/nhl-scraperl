@@ -52,7 +52,7 @@
    "provides" : {
       "Sport::Analytics::NHL" : {
          "file" : "lib/Sport/Analytics/NHL.pm",
-         "version" : "2.00"
+         "version" : "2.01"
       },
       "Sport::Analytics::NHL::Config" : {
          "file" : "lib/Sport/Analytics/NHL/Config.pm"
@@ -89,6 +89,6 @@
       }
    },
    "release_status" : "stable",
-   "version" : "2.00",
+   "version" : "2.01",
    "x_serialization_backend" : "JSON::PP version 4.05"
 }

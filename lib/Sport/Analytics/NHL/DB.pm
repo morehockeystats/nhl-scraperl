@@ -6,12 +6,14 @@ use v5.10.1;
 
 use Data::Dumper;
 
+use List::MoreUtils qw(any);
+
 use Sport::Analytics::NHL::Vars   qw(
-	$CURRENT_SEASON $CACHES $DEFAULT_STORAGE $DB
+	$CURRENT_SEASON $CACHES $DEFAULT_STORAGE $DB $CONFIG
 	$DEFAULT_MONGO_DB $MONGO_HOST $MONGO_PORT
 );
 use Sport::Analytics::NHL::Config qw($FIRST_SEASON);
-use Sport::Analytics::NHL::Util   qw(:debug :tools);
+use Sport::Analytics::NHL::Util   qw(:debug :tools log_mhs);
 
 use if ! $ENV{HOCKEYDB_NODB} && $DEFAULT_STORAGE eq 'mongo', 'MongoDB';
 use if ! $ENV{HOCKEYDB_NODB} && $DEFAULT_STORAGE eq 'mongo', 'BSON::OID';
@@ -138,12 +140,16 @@ sub new ($;$) {
 		if $ENV{HOCKEYDB_NODB} || $DEFAULT_STORAGE ne 'mongo';
 	my $self = {};
 	my $database = $config->{MONGO_DB}   || $ENV{HOCKEYDB_DBNAME} || $DEFAULT_MONGO_DB;
-	my $host     = $config->{MONGO_HOST} || $MONGO_HOST || $DEFAULT_HOST;
-	my $port     = $config->{MONGO_PORT} || $MONGO_PORT || $DEFAULT_PORT;
+	my $host     = $config->{MONGO_HOST} || $MONGO_HOST || $CONFIG->{mongo_host} || $DEFAULT_HOST;
+	my $port     = $config->{MONGO_PORT} || $MONGO_PORT || $CONFIG->{mongo_port} || $DEFAULT_PORT;
 	$self->{client} = MongoDB::MongoClient->new(
-		host => sprintf(
+		host                  => sprintf(
 			"mongodb://%s:%d", $host, $port
 		), connect_timeout_ms => 60000,
+		$CONFIG->{mongo_user} ? (
+			username => $CONFIG->{mongo_user},
+			password => $CONFIG->{mongo_pass},
+		) : (),
 	);
 	$self->{dbh} = $self->{client}->get_database($database);
 	$DB = $self;
@@ -276,12 +282,17 @@ sub insert ($$$;$$) {
 	$data = [$data] if ref $data ne 'ARRAY';
 	my $now = time;
 	$_->{inserted} = $now for @{$data};
+	my $id_field = $opts->{id_field} || get_default_id_field($collection_name);
 	if ($opts->{force}) {
-		my $id_field = $opts->{id_field} || get_default_id_field($collection_name);
 		my @ids = map($_->{$id_field}, @{$data});
+		verbose("Removing items with $id_field " . join(',', @ids));
+		log_mhs('DB', "Removed " . scalar(@ids) . " items from $collection_name", 'notice');
 		$collection->delete_many({$id_field => {'$in' => \@ids}});
 	}
+	my $found = any { $_->{key}{$id_field} } $collection->indexes->list->all();
+	$collection->indexes->create_one( [ $id_field => 1 ], { unique => 1 } ) if $found;
 	$collection->insert_many($data);
+	log_mhs('DB', "Inserted " . scalar(@{$data}) . " items into $collection_name", 'notice');
 }
 
 1;

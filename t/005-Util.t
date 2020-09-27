@@ -6,10 +6,14 @@ use warnings FATAL => 'all';
 use experimental qw(smartmatch);
 
 use Test::More;
+use t::lib::Util;
+
+test_env();
 
 use Sport::Analytics::NHL::Util qw(:all);
+use Sport::Analytics::NHL::Vars qw($LOG_DIR $IS_AUTHOR);
 
-plan tests => 10;
+plan tests => 11;
 
 my $string = 'x';
 
@@ -38,3 +42,9 @@ is_deeply(merge_hashes({a => 1},{}), {a => 1}, 'no matter the order');
 is_deeply(merge_hashes({a => 1},{b => 2}), {a => 1, b => 2}, 'two hashes combined');
 is_deeply(merge_hashes({a => 1, c => 1},{a => 2, b => 2}), {a => 2, b => 2, c => 1}, 'override correct');
 
+my $fn = log_mhs('abcd', 'message', $IS_AUTHOR ? 'debug' : 'error');
+is(-s $fn, 49, 'filename written correctly');
+unlink $fn;
+END {
+    unlink glob "$LOG_DIR/*"
+}

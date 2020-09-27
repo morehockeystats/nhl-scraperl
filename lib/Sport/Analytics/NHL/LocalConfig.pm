@@ -30,16 +30,21 @@ our %LOCAL_CONFIG = (
 	BASE_DIR                      => '/hockey2',
 	SCHEDULE_FILE                 => 'schedule.json',
 	DEFAULT_PLAYERFILE_EXPIRATION => 1,
-	DEFAULT_MONGO_DB              => 'hockey-2020',
-	DEFAULT_SQL_DB                => 'hockey-2020',
+	DEFAULT_MONGO_DB              => 'hockey2020',
+	DEFAULT_SQL_DB                => 'hockey2020',
 	DEFAULT_STORAGE               => 'mongo',
 	FS_BACKUP                     => 1,
 	MONGO_HOST                    => '127.0.0.1',
 	MONGO_PORT                    => 27017,
+	CONFIG_FILE                   => 'hockeydb.conf',
 );
 
+$LOCAL_CONFIG{CONFIG_FILE} = (
+	$LOCAL_CONFIG{IS_AUTHOR} ? './' : '/etc/'
+) . "$LOCAL_CONFIG{CONFIG_FILE}";
+
 $LOCAL_CONFIG{uc . '_DIR'} = $LOCAL_CONFIG{BASE_DIR} . "/$_"
-	for qw(reports data logs mail);
+	for qw(reports data log mail);
 
 our @EXPORT = qw(%LOCAL_CONFIG);
 

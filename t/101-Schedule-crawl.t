@@ -4,6 +4,9 @@ use v5.10.1;
 use strict;
 use warnings FATAL => 'all';
 
+use t::lib::Util;
+test_env();
+
 use Sport::Analytics::NHL::Vars qw($IS_AUTHOR);
 use Sport::Analytics::NHL::Util qw(:debug);
 use Sport::Analytics::NHL::Config qw(%TEAMS);
