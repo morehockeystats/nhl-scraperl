@@ -30,3 +30,7 @@ Revision history for Sport::Analytics::NHL
 	* Fixed a bug in the schedule crawler.
 	* Installed a workaround for NHL bug with the 2016 season schedule.
 	* Added logging and indexing to the database.
+
+2.10    Mon Oct 12 14:08:01 EDT 2020
+    * Fixed some minor bugs with schedule crawling
+    * Added game crawling (without parsing)

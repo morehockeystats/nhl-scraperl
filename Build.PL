@@ -41,6 +41,7 @@ my $builder = Module::Build->new(
 	add_to_cleanup     => [ 'Sport-Analytics-NHL-*' ],
 	script_files       => {
 		'scripts/crawl-schedule' => 'blib/scripts/crawl-schedule',
+		'scripts/crawl-games'    => 'blib/scripts/crawl-games',
 	},
 );
 

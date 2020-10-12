@@ -8,6 +8,8 @@ use Data::Dumper;
 use File::Basename;
 use File::Path qw(mkpath);
 
+use experimental qw(smartmatch);
+
 use Sport::Analytics::NHL::Vars qw(:local_config);
 
 use Date::Parse;
@@ -143,6 +145,14 @@ Logs a message into a file by severity
  [optional] The log file. $LOG_DIR/$0.log is the default value.
  Returns: the log filename
 
+=item C<get_magic>
+
+Tries to determine the file type by its first character, not dissimilar to UNIX's 'magic' command.
+
+ Arguments: The file contents string
+ Returns: 'json', 'html' or 'text'(default).
+          Special case: returns '' for empty or undefined argument.
+
 =back
 
 =cut
@@ -155,15 +165,18 @@ my @file = qw(read_file read_tab_file write_file read_config);
 my @tools = qw(merge_hashes);
 my @time = qw();
 my @logs = qw(log_mhs);
+my @strings = qw(get_magic);
 our @EXPORT_OK = (
-	@debug, @file, @tools, @time, @logs
+	@debug, @file, @tools, @time, @logs, @strings,
 );
 
 our %EXPORT_TAGS = (
-	debug => [ @debug ],
-	file  => [ @file ],
-	tools => [ @tools ],
-	time  => [ @time ],
+	debug   => [ @debug ],
+	file    => [ @file ],
+	tools   => [ @tools ],
+	logs    => [ @logs ],
+	time    => [ @time ],
+	strings => [ @strings ],
 );
 
 my ($package, $file, $line);
@@ -384,6 +397,22 @@ sub log_mhs ($$;$$$) {
 	printf $fh "%s [%s] <%s>: %s\n", scalar(localtime), $severity, $facility, $message;
 	close $fh;
 	$filename;
+}
+
+sub get_magic ($) {
+
+	my $string = shift;
+
+	return '' unless $string && length($string);
+	$string =~ s/^\s+//;
+	my $type;
+	for (substr($string, 0, 1)) {
+		when ('{') { $type = 'json' }
+		when ('[') { $type = 'json' }
+		when ('<') { $type = 'html' }
+		default    { $type = 'text' }
+	}
+	$type;
 }
 
 1;

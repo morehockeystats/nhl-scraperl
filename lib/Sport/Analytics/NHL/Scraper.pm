@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 use v5.10.1;
 
+use JSON;
 use LWP::Simple;
 use Time::HiRes qw(usleep);
 
@@ -27,7 +28,15 @@ Scrape and crawl the NHL website for data
 
 =over 2
 
-=item C<scrape>
+=item C<validate_json($;$)>
+
+A simple routine to validate the scraped JSON.
+
+ Arguments: the json string
+ [optional] whether to die or to warn
+ Returns: 0 for bad, 1 for good json
+
+=item C<scrape($)>
 
 A wrapper around the LWP::Simple::get() call for retrying and control.
 
@@ -44,9 +53,22 @@ Returns: the content if both download and validation are successful undef otherw
 
 =cut
 
-our @EXPORT_OK = qw(scrape);
+our @EXPORT_OK = qw(scrape validate_json);
 
 our $DEFAULT_RETRIES = 3;
+
+sub validate_json ($;$) {
+
+	my $json  = shift;
+	my $fatal = shift || 0;
+
+	eval { decode_json($json) };
+	if ($@) {
+		$fatal ? die $@ : warn $@;
+		return 0;
+	}
+	1;
+}
 
 sub scrape ($) {
 

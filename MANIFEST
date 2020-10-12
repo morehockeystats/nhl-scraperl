@@ -4,6 +4,7 @@ Changes
 CODE_OF_CONDUCT.md
 lib/Sport/Analytics/NHL/Config.pm
 lib/Sport/Analytics/NHL/DB.pm
+lib/Sport/Analytics/NHL/Game.pm
 lib/Sport/Analytics/NHL/LocalConfig.pm
 lib/Sport/Analytics/NHL.pm
 lib/Sport/Analytics/NHL/Schedule.pm
@@ -19,6 +20,7 @@ MANIFEST			This list of files
 README
 README.md
 scripts/crawl-schedule
+scripts/crawl-games
 t/000-load.t
 t/001-LocalConfig.t
 t/002-Vars.t
@@ -28,7 +30,8 @@ t/005-Util.t
 t/010-Tools.t
 t/011-Tools-dates.t
 t/012-Tools-resolve.t
-t/040-Scraper-scrape.t
+t/040-Scraper-validate.t
+t/041-Scraper-scrape.t
 t/050-DB-new.t
 t/051-DB-utils.t
 t/052-DB-query.t
@@ -37,12 +40,17 @@ t/100-Schedule-new-utils.t
 t/101-Schedule-crawl.t
 t/102-Schedule-save.t
 t/103-Schedule-load.t
+t/110-Game-new.t
+t/111-Game-utils.t
+t/112-Game-load.t
+t/113-Game-save.t
+t/114-Game-crawl.t
 t/500-NHL.t
 t/501-NHL-schedule.t
+t/502-NHL-game.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
 t/lib/Util.pm
-t/template
 META.yml
 META.json

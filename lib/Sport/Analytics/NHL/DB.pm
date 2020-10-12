@@ -247,11 +247,10 @@ sub query ($$$$$) {
 	my $result = $collection->$method($query);
 	if (ref $result eq 'MongoDB::Cursor') {
 		$result->$_($opts->{$_}) for grep {$opts->{$_}} qw(limit sort);
-		return $opts->{all} ? $result->all() : $result;
 	}
-	else {
-		return $result;
-	}
+	ref $result eq 'MongoDB::Cursor' && $opts->{all}
+		? $result->all()
+		: $result;
 }
 
 sub find ($$$$) { shift->query('find',     @_); }

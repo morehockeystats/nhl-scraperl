@@ -13,7 +13,7 @@ test_env();
 use Sport::Analytics::NHL::Util qw(:all);
 use Sport::Analytics::NHL::Vars qw($LOG_DIR $IS_AUTHOR);
 
-plan tests => 11;
+plan tests => 16;
 
 my $string = 'x';
 
@@ -45,6 +45,9 @@ is_deeply(merge_hashes({a => 1, c => 1},{a => 2, b => 2}), {a => 2, b => 2, c =>
 my $fn = log_mhs('abcd', 'message', $IS_AUTHOR ? 'debug' : 'error');
 is(-s $fn, 49, 'filename written correctly');
 unlink $fn;
+
+my $magics = [[qw({x} json)], [qw([x;a] json)], [qw(<x> html)], [qw[(x) text]], [undef, ''] ];
+is(get_magic($_->[0]), $_->[1], "Magic for " . ($_->[0] || "''") . " is correct") for @{$magics};
 END {
     unlink glob "$LOG_DIR/*"
 }

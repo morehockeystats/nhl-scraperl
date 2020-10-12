@@ -37,6 +37,7 @@ our %LOCAL_CONFIG = (
 	MONGO_HOST                    => '127.0.0.1',
 	MONGO_PORT                    => 27017,
 	CONFIG_FILE                   => 'hockeydb.conf',
+	GAME_STORABLE                 => 'game.storable',
 );
 
 $LOCAL_CONFIG{CONFIG_FILE} = (

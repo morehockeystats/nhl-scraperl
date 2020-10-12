@@ -35,6 +35,17 @@ our @LOCKOUT_SEASONS = (2004);
 our $DELAYED_START   =  2020;
 our $DELAYED_STOP    =  2019;
 
+our %FIRST_REPORT_SEASONS = (
+        BS => $FIRST_SEASON,
+        #PB => 2010,
+        GS => 1999,
+        ES => 1999,
+        TV => 2007,
+        TH => 2007,
+        PL => 2002,
+        RO => 2005,
+);
+
 our $REGULAR = 2;
 our $PLAYOFF = 3;
 
@@ -527,7 +538,10 @@ our %TEAM_FULL_NAMES = (
 	VGK => 'Vegas Golden Knights',
 );
 
-our @seasons = qw($FIRST_SEASON $DELAYED_START $DELAYED_STOP @LOCKOUT_SEASONS);
+our @seasons = qw(
+	$FIRST_SEASON $DELAYED_START $DELAYED_STOP @LOCKOUT_SEASONS
+	%FIRST_REPORT_SEASONS
+);
 our @basic   = qw($REGULAR $PLAYOFF);
 our @league  = qw(%TEAMS %TEAM_FULL_NAMES);
 

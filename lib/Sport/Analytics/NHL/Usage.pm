@@ -580,6 +580,10 @@ our %OPTS = (
 			description => 'Try to use schedule already present in the system',
 		},
 		{
+			long        => 'no-parse',
+			description => 'Do not parse the scraped files',
+		},
+		{
 			long        => 'rating', arg => 'NUM', type => 'i', optional => 1,
 			description => 'Use Elo ratings in calculations',
 		},

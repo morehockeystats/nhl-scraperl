@@ -97,7 +97,7 @@ passed.
 
 =cut
 
-use Sport::Analytics::NHL::Scraper qw(scrape);
+use Sport::Analytics::NHL::Scraper qw(scrape validate_json);
 use Sport::Analytics::NHL::Tools   qw(:dates resolve_team);
 use Sport::Analytics::NHL::DB;
 
@@ -258,7 +258,9 @@ sub crawl_by_date ($;$) {
 	substr($date, 6, 0) = '-';
 	substr($date, 4, 0) = '-';
 	my $url = sprintf($SCHEDULE_JSON_API, $date, $date);
-	my $schedule_json = scrape({url => $url, die => 1});
+	my $schedule_json = scrape({
+		url => $url, die => 1, validate => sub { validate_json(shift, 1) }
+	});
 	$self->populate($schedule_json);
 }
 

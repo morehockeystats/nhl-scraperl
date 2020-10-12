@@ -1,0 +1,19 @@
+#!/usr/local/bin/perl
+
+package crawl_game;
+
+use parent 'Sport::Analytics::NHL::Script';
+use Sport::Analytics::NHL qw(get_games);
+
+sub run ($) { get_games(shift); }
+
+package main;
+my $app = crawl_game->new(
+	'crawls the game',
+	[qw(:database :season :date force test data-dir no-parse)],
+	[
+		{ name => 'ID', description => 'Crawl this game id', optional => 1 },
+	],
+);
+
+$app->run();

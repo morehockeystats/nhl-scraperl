@@ -52,13 +52,16 @@
    "provides" : {
       "Sport::Analytics::NHL" : {
          "file" : "lib/Sport/Analytics/NHL.pm",
-         "version" : "2.01"
+         "version" : "2.10"
       },
       "Sport::Analytics::NHL::Config" : {
          "file" : "lib/Sport/Analytics/NHL/Config.pm"
       },
       "Sport::Analytics::NHL::DB" : {
          "file" : "lib/Sport/Analytics/NHL/DB.pm"
+      },
+      "Sport::Analytics::NHL::Game" : {
+         "file" : "lib/Sport/Analytics/NHL/Game.pm"
       },
       "Sport::Analytics::NHL::LocalConfig" : {
          "file" : "lib/Sport/Analytics/NHL/LocalConfig.pm"
@@ -89,6 +92,6 @@
       }
    },
    "release_status" : "stable",
-   "version" : "2.01",
+   "version" : "2.10",
    "x_serialization_backend" : "JSON::PP version 4.05"
 }
